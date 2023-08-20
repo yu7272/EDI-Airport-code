@@ -4,7 +4,7 @@ The code of model for dissertation
 
 There are total 10 files.
 
-All data: 
+All data: (The file named 'data')
 original data: gas_consumption.csv, pax_atms.csv
 the data after imputing : imputed_total_data.csv
 
@@ -15,7 +15,7 @@ The two-stage model: cluster_model.py
 
 The simulated annealing algorithm: SA.py
 
-Two baseline models: SARIMAX.py, SVM.py
+Two baseline models (The file named 'baseline_models'): SARIMAX.py, SVM.py
 
 
 
