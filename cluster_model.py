@@ -19,7 +19,7 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_absolute_percentage_error, mean_squared_error
 
-data = pd.read_csv('imputed_total_data.csv')
+data = pd.read_csv('/Users/air/Desktop/data/imputed_total_data.csv')
 data.drop('Unnamed: 0',axis=1, inplace=True)
 data.info()
 
@@ -101,40 +101,31 @@ print("Best min_samples:", best_min_samples)#185 385
 print("Best Silhouette Score:", best_score)# 0.22 0.237
 '''
 
-#draw the clustering results
-unique_labels = {-1, 0}#set(labels)
-core_samples_mask = np.zeros_like(labels, dtype=bool)
-core_samples_mask[db.core_sample_indices_] = True
 
-colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]
-for k, col in zip(unique_labels, colors):
-    if k == -1:
-        # Black used for noise.
-        col = [0, 0, 0, 1]
+# Create a scatter plot for each cluster
+for label in set(labels):
+    if label == -1:
+        col = [0, 0, 0, 1]  # Noise points are black
+    else:
+        col = plt.cm.Spectral(label / n_clusters_)  # Assign colors to clusters
 
-    class_member_mask = labels == k
+    class_member_mask = (labels == label)
+    xy = X[class_member_mask]
 
-    xy = X[class_member_mask & core_samples_mask]
     plt.plot(
-        xy[:, 0],
-        #xy[:, 1],
+        xy[:, 0],  # X-axis values
+        xy[:, 1],  # Y-axis values
         "o",
         markerfacecolor=tuple(col),
         markeredgecolor="k",
-        markersize=14,
+        markersize=6 if label == -1 else 10,  # Adjust marker size for noise points and clusters
+        label=f'Cluster {label}' if label != -1 else 'Noise'
     )
 
-    xy = X[class_member_mask & ~core_samples_mask]
-    plt.plot(
-        xy[:, 0],
-        #xy[:, 1],
-        "o",
-        markerfacecolor=tuple(col),
-        markeredgecolor="k",
-        markersize=6,
-    )
-
-plt.title("The results of DBSCAN")
+plt.title("DBSCAN Clustering Results")
+plt.xlabel("Feature 1")  # Replace with your actual feature names
+plt.ylabel("Feature 2")
+plt.legend()
 plt.show()
 
 
